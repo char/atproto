@@ -15,7 +15,10 @@ const is$typed = _is$typed,
   validate = _validate
 const id = 'com.atproto.repo.importRepo'
 
-export type QueryParams = {}
+export type QueryParams = {
+  /** Can be set to 'false' to skip additional validation of the CAR file. */
+  validate?: boolean
+}
 export type InputSchema = string | Uint8Array | Blob
 
 export interface CallOptions {

@@ -20,13 +20,13 @@ export default function (server: Server, ctx: AppContext) {
     auth: ctx.authVerifier.accessFull({
       checkTakedown: true,
     }),
-    handler: async ({ input, auth }) => {
+    handler: async ({ params, input, auth }) => {
       const did = auth.credentials.did
       if (!ctx.cfg.service.acceptingImports) {
         throw new InvalidRequestError('Service is not accepting repo imports')
       }
       await ctx.actorStore.transact(did, (store) =>
-        importRepo(store, input.body),
+        importRepo(store, input.body, params.validate),
       )
     },
   })
@@ -35,6 +35,7 @@ export default function (server: Server, ctx: AppContext) {
 const importRepo = async (
   actorStore: ActorStoreTransactor,
   incomingCar: AsyncIterable<Uint8Array>,
+  verifyDid: boolean,
 ) => {
   const now = new Date().toISOString()
   const rev = TID.nextStr()
@@ -56,7 +57,7 @@ const importRepo = async (
     roots[0],
     undefined,
     undefined,
-    { ensureLeaves: false },
+    { ensureLeaves: false, verifyDid },
   )
   diff.commit.rev = rev
   await actorStore.repo.storage.applyCommit(diff.commit, currRepo === null)

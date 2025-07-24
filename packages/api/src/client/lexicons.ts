@@ -1992,6 +1992,17 @@ export const schemaDict = {
         input: {
           encoding: 'application/vnd.ipld.car',
         },
+        parameters: {
+          type: 'params',
+          properties: {
+            validate: {
+              type: 'boolean',
+              description:
+                "Can be set to 'false' to skip additional validation of the CAR file.",
+              default: true,
+            },
+          },
+        },
       },
     },
   },

@@ -55,9 +55,9 @@ export const verifyDiff = async (
   updateRoot: CID,
   did?: string,
   signingKey?: string,
-  opts?: { ensureLeaves?: boolean },
+  opts?: { ensureLeaves?: boolean; verifyDid?: boolean },
 ): Promise<VerifiedDiff> => {
-  const { ensureLeaves = true } = opts ?? {}
+  const { ensureLeaves = true, verifyDid = true } = opts ?? {}
   const stagedStorage = new MemoryBlockstore(updateBlocks)
   const updateStorage = repo
     ? new SyncStorage(stagedStorage, repo.storage)
@@ -68,7 +68,7 @@ export const verifyDiff = async (
     did,
     signingKey,
   )
-  if (repo?.did && repo.did !== updated.did) {
+  if (verifyDid && repo?.did && repo.did !== updated.did) {
     throw new Error(
       `mismatched commit did (expected ${repo.did}, got ${updated.did})`,
     )

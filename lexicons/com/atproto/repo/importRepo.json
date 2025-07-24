@@ -7,6 +7,16 @@
       "description": "Import a repo in the form of a CAR file. Requires Content-Length HTTP header to be set.",
       "input": {
         "encoding": "application/vnd.ipld.car"
+      },
+      "parameters": {
+        "type": "params",
+        "properties": {
+          "validate": {
+            "type": "boolean",
+            "description": "Can be set to 'false' to skip additional validation of the CAR file.",
+            "default": true
+          }
+        }
       }
     }
   }
